@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.edison</groupId>
+    <artifactId>spring-cloud-alibaba-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>user-microsvcs</module>
+        <module>cloud-gateway</module>
+        <module>cloud-common</module>
+        <module>cloud-auth</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <!--springboot 、cloud 、cloud alibaba三者的版本依赖关系可以参考https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明-->
+        <springboot.version>2.2.4.RELEASE</springboot.version>
+        <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
+        <spring.cloud.alibaba.version>2.2.0.RELEASE</spring.cloud.alibaba.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <java.version>1.8</java.version>
+        <maven.compler.source>1.8</maven.compler.source>
+        <maven.compler.target>1.8</maven.compler.target>
+        <!--<skipTests>true</skipTests>--><!--这个打包时会编译测试类生成class文件，但不会运行测试类-->
+        <maven.test.skip>true</maven.test.skip><!--这个打包时都不会编译测试类，也不会运行测试类-->
+    </properties>
+
+    <packaging>pom</packaging> <!--这个需要添加-->
+
+    <dependencyManagement> <!--这里面的依赖包，如果子项目会用到，需要在自己的pom.xml中引入，此处只做版本号管理，不实际引入-->
+        <dependencies><!--引入springcloud接口以及官网的spring cloud gateway，而netflix那一套是springcloud的主要实现之一-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency><!--引入springcloud的另一主要实现apring cloud alibaba-->
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies><!--这些依赖包子项目就不需要再写了，会直接继承-->
+        <!-- lombok 简化开发 @DATA提供get/set方法 而@SLFJ2提供log日志-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+        </dependency>
+        <dependency><!-- 引入log4j2依赖 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>2.2.0.RELEASE</version>
+        </dependency>
+        <dependency><!--log4j2异步日志需要的东西-->
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>sit</id>
+            <properties>
+                <profileActive>sit</profileActive>
+            </properties>
+        </profile>
+    </profiles>
+
+
+</project>
