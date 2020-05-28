@@ -1,9 +1,9 @@
 package com.edison.springCloudAlibabaDemo.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +14,10 @@ import java.io.PrintWriter;
 @RequestMapping("/hello")
 @Slf4j
 public class HelloController {
-    @GetMapping("/sayhello" )
-    public String hello(HttpServletRequest request,HttpServletResponse response){
+    @PostMapping("/sayhello" )
+    public String hello(HttpServletRequest request,@RequestBody String body){
 
-//        log.info(request.getCharacterEncoding());
+        log.info(request.getCharacterEncoding());
 //        //请求使用的协议和版本
 //        log.info("Protocol: " + request.getProtocol());
 //        //返回当前所使用的协议：http  ftp等
@@ -67,14 +67,14 @@ public class HelloController {
 //        log.info("Cookie : " + request.getHeader("Cookie"));
 //        log.info("Created : " + request.getSession().getCreationTime());
 //        log.info("LastAccessed : " + request.getSession().getLastAccessedTime());
-        try {
-            PrintWriter writer= response.getWriter();
-            writer.write("QSSSS");
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        JSONObject jsonObject= JSONObject.parseObject(body);
+        String name=jsonObject.getString("name");
+        long ts=jsonObject.getLongValue("_ts");
+        log.info("_ts={}",ts);
+        if(name==null) {
+            return "HELLO";
+        }else{
+            return "HELLO "+name;
         }
-
-        return "HELLO";
     }
 }

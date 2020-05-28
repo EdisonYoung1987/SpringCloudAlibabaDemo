@@ -25,6 +25,7 @@
         <!--springboot 、cloud 、cloud alibaba三者的版本依赖关系可以参考https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明-->
         <springboot.version>2.2.4.RELEASE</springboot.version>
         <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
+<!--        <spring.cloud.version>Greenwich.RC2</spring.cloud.version>-->
         <spring.cloud.alibaba.version>2.2.0.RELEASE</spring.cloud.alibaba.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
@@ -46,7 +47,9 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency><!--引入springcloud的另一主要实现apring cloud alibaba-->
+            <dependency>
+                <!--引入springcloud的另一主要实现apring cloud alibaba
+                    0.9以上的版本的groupId是这个，低版本是org.springframework.cloud-->
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring.cloud.alibaba.version}</version>
@@ -57,6 +60,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${springboot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -71,32 +80,46 @@
         <dependency><!-- 引入log4j2依赖 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>2.2.0.RELEASE</version>
+            <version>${springboot.version}</version>
         </dependency>
         <dependency><!--log4j2异步日志需要的东西-->
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.4.2</version>
         </dependency>
+        <!--使bootstrap配置生效-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+        </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <profileActive>dev</profileActive>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>sit</id>
-            <properties>
-                <profileActive>sit</profileActive>
-            </properties>
-        </profile>
-    </profiles>
+    <!--这里是指定update和插件的仓库，这样打包的时候也会从该仓库下载jar包-->
+    <!--<repositories>
+        <repository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>&lt;!&ndash;false:SNAPSHOT版本的jar包不去这里寻找和下载&ndash;&gt;
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
-
+    <pluginRepositories>
+        <pluginRepository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>-->
 </project>

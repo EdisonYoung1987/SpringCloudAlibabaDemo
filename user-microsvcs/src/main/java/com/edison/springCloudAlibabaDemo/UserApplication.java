@@ -6,11 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
-public class GatewayApplication {
-
+public class UserApplication {
     public static void main(String[] args) {
-        SpringApplication.run(GatewayApplication.class, args);
-        log.info("--------------网关服务启动---------------");
+        SpringApplication.run(UserApplication.class, args);
+        log.info("-----------用户应用已启动--------------");
     }
 
 }

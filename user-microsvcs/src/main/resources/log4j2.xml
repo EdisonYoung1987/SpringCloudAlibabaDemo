@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，
+     当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration status="WARN" monitorInterval="60">
+    <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+
+    <!--变量配置-->
+    <Properties>
+        <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+        <!-- %logger{36} 表示 Logger 名字最长36个字符 -->
+<!--        <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />-->
+        <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-30.30c{3} [%M] %L - %msg%n" /><!--%c=logger类名 %M 方法名 %L 行号-->
+        <!-- 定义日志存储的路径，不要配置相对路径 -->
+        <!--表示取环境变量SPRINGBOOTDEMO_HOME 这个需要配置相应的环境变量-->
+        <property name="FILE_PATH" value="${env:SPRINGBOOTDEMO_HOME}" />
+        <property name="PROJECT_NAME" value="edison_service" />
+    </Properties>
+
+    <appenders>
+
+        <console name="Console" target="SYSTEM_OUT">
+            <!--输出日志的格式-->
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <!--控制台只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </console>
+
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，适合临时测试用-->
+      <!--  <File name="Filelog" fileName="${FILE_PATH}/${PROJECT_NAME}/test.log" append="false">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </File>-->
+
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+<!--        <RollingFile name="RollingFileInfo"-->
+        <RollingRandomAccessFile name="RollingFileInfo"
+                     fileName="${FILE_PATH}/${PROJECT_NAME}/logs/info.log"
+                     filePattern="${FILE_PATH}/${PROJECT_NAME}/logs/his/info-%d{yyyy-MM-dd}_%i.log"
+                     immediateFlush="false"><!--filePattern表示压缩文件名称？？-->
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <!--onMatch="ACCEPT" 匹配该级别及以上 "DENY" 不匹配该级别及以上 "NEUTRAL" 该级别级以上的由下一个filter处理，如果是最后一个filter，则匹配该级别及以上-->
+            <!--onMismatch="ACCEPT" 匹配该级别以下的 "DENY" 不匹配该级别以下的 "NEUTRAL" 该级别及以下的由下一个filter处理，否则不匹配该级别以下的-->
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Policies><!--按时间间隔进行滚动或者大小进行滚动-->
+                <!--interval属性用来指定多久滚动一次，默认是1 hour；
+                若modulate为true，会以0为开始对interval进行偏移计算。
+                例如，最小时间粒度为小时，当前为3:00，interval为4，则以后触发rollover的时间依次为4:00，8:00，12:00，16:00,...。-->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="15"/>
+        </RollingRandomAccessFile>
+
+        <!-- 这个会打印出所有的warn及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingRandomAccessFile name="RollingFileWarn"
+                     fileName="${FILE_PATH}/${PROJECT_NAME}/logs/warn.log"
+                     filePattern="${FILE_PATH}/${PROJECT_NAME}/logs/his/warn-%d{yyyy-MM-dd}_%i.log"
+                     immediateFlush="false">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="15"/>
+        </RollingRandomAccessFile>
+
+        <!-- 这个会打印出所有的error及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingRandomAccessFile name="RollingFileError"
+                     fileName="${FILE_PATH}/${PROJECT_NAME}/logs/error.log"
+                     filePattern="${FILE_PATH}/${PROJECT_NAME}/logs/his/error-%d{yyyy-MM-dd}_%i.log"
+                     immediateFlush="false">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="15"/>
+        </RollingRandomAccessFile>
+
+    </appenders>
+
+    <!--Logger节点用来单独指定日志的形式，比如要为指定包下的class指定不同的日志级别等。-->
+    <!--然后定义loggers，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+<!--        <logger name="org.mybatis" level="info" additivity="false">-->
+<!--            <AppenderRef ref="Console"/>-->
+<!--        </logger>-->
+        <!--监控系统信息-->
+        <!--若是additivity设为false，则 子Logger 只会在自己的appender里输出，而不会在 父Logger 的appender里输出。-->
+<!--        <Logger name="org.springframework" level="info" additivity="true">-->
+<!--            <AppenderRef ref="Console"/>-->
+<!--        </Logger>-->
+
+        <Logger name="com.edison.springCloudAlibabaDemo" level="INFO" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </Logger>
+
+        <!--AsyncLogger结合disruptor高性能队列实现对日志的异步输出-->
+        <AsyncLogger name="asyncLogger" level="INFO" includeLocation="false" additivity="false">
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+<!--            <appender-ref ref="Console"/>-->
+        </AsyncLogger>
+
+        <root level="WARN">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </loggers>
+
+</configuration>

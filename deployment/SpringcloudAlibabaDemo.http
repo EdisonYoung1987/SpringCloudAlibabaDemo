@@ -1,0 +1,27 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST 127.0.0.1:9001/user/hello/sayhello
+content-Type: application/json;charset=UTF-8
+uid: 15123926942
+
+{
+    "name":"zhangssssssan",
+    "_signature": "_ts123971293712namezhangssssssan111",
+    "_ts":"123971293712"
+}
+
+###
+POST 127.0.0.1:9001/user/file/upload
+content-Type: application/json;charset=UTF-8
+
+{
+  "name":"zhangssssssan",
+  "_ts":"123971293712"
+}
+
+###
