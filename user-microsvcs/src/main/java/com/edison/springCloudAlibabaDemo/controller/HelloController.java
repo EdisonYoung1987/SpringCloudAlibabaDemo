@@ -2,6 +2,7 @@ package com.edison.springCloudAlibabaDemo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.io.PrintWriter;
 @Slf4j
 public class HelloController {
     @PostMapping("/sayhello" )
-    public String hello(HttpServletRequest request,@RequestBody String body){
+    public ResponseData hello(HttpServletRequest request, @RequestBody String body){
 
         log.info(request.getCharacterEncoding());
 //        //请求使用的协议和版本
@@ -72,9 +73,9 @@ public class HelloController {
         long ts=jsonObject.getLongValue("_ts");
         log.info("_ts={}",ts);
         if(name==null) {
-            return "HELLO";
+            return ResponseData.success("HELLO");
         }else{
-            return "HELLO "+name;
+            return ResponseData.success("HELLO "+name);
         }
     }
 }

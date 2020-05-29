@@ -1,0 +1,6 @@
+################
+##配置都在nacos上
+################
+git:
+  client_id: 76010f96ba5380e16c13
+  client_secret: b1d17709b531d64646d7cb0d08e6a2755db2d909

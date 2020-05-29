@@ -2,13 +2,14 @@ package com.edison.springCloudAlibabaDemo.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.edison.springCloudAlibabaDemo.AuthToken;
 import com.edison.springCloudAlibabaDemo.constant.ResponseConstant;
 import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import com.edison.springCloudAlibabaDemo.response.RspException;
 import com.edison.springCloudAlibabaDemo.util.FilterUtil;
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -18,18 +19,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @Component
 public class AuthenticationFilter implements GlobalFilter, Ordered {
+    Logger logger= LoggerFactory.getLogger(AuthenticationFilter.class);
     @Autowired
     RedisTemplate redisTemplate;
 
@@ -38,6 +36,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request= exchange.getRequest();
         HttpHeaders headers=request.getHeaders();
         log.info("当前请求路径：{}",request.getPath());
+        logger.info("2当前请求路径：{}",request.getPath());
 
         //检查登录信息
         String uid= FilterUtil.getUidFromHeader(headers);

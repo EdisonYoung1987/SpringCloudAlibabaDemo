@@ -15,13 +15,9 @@ uid: 15123926942
     "_ts":"123971293712"
 }
 
-###
-POST 127.0.0.1:9001/user/file/upload
+###第三方登录
+GET http://localhost:9001/auth/login/loginThirdGit?code=015dd1b86e913be4ee24
 content-Type: application/json;charset=UTF-8
 
-{
-  "name":"zhangssssssan",
-  "_ts":"123971293712"
-}
 
 ###

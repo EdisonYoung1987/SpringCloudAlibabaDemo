@@ -1,4 +1,4 @@
-package com.edison.springCloudAlibabaDemo;
+package com.edison.springCloudAlibabaDemo.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

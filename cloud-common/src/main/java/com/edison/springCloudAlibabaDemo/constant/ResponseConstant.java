@@ -5,9 +5,12 @@ public enum ResponseConstant {
 
     LOGIN_WRONG_PARAMETERS(10001,"登录参数错误!"),
     LOGIN_NO_LOGIN(10002,"未登录"),
-    REQUEST_TO_FREQUENT(10003,"请求过于频繁,请稍后再试"),
-    REQUEST_TIMEOUT(10004,"请求超时"),
-    REQUEST_DUPLICATED(10005,"请求重复"),
+    LOGIN_THIRD_LOGIN_FAIL(10003,"第三方授权登录失败"),
+
+    REQUEST_TO_FREQUENT(10050,"请求过于频繁,请稍后再试"),
+    REQUEST_TIMEOUT(10051,"请求超时"),
+    REQUEST_DUPLICATED(10052,"请求重复"),
+
     REMOTE_SERVICE_UNAVAILABLE(88888,"远程服务不可达"),
     SYSTEM_ERR_CODE(99999,"系统错误");
 
