@@ -5,14 +5,34 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
+####这个实际上并没有真正再auth验权
 POST 127.0.0.1:9001/user/hello/sayhello
 content-Type: application/json;charset=UTF-8
 uid: 15123926942
 
 {
-    "name":"zhangssssssan",
-    "_signature": "_ts123971293712namezhangssssssan111",
-    "_ts":"123971293712"
+  "_ts":"123971293712",
+  "_signature": "_ts123971293712111"
+}
+
+###这个需要再auth验权
+POST 127.0.0.1:9001/user/user/getUserInfo
+content-Type: application/json;charset=UTF-8
+uid: 15123926942
+
+{
+"_ts":"123971293712",
+"_signature": "_ts123971293712111"
+}
+
+###登录
+POST 127.0.0.1:9001/auth/login/login
+content-Type: application/json;charset=UTF-8
+
+{
+"username":"admin",
+"password": "admin",
+"_ts":"123971293712"
 }
 
 ###第三方登录

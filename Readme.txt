@@ -14,7 +14,8 @@ cloud-gateway:
 账号密码登录：
     0. 登录-1：前端请求login/pk获取公钥
     1. 登录-2：前端用公钥加密用户密码发送后端/login/login,后端使用私钥解密后再Bcrypt加密后请求/oauth/token获取access_token，
-               登录成功后后端会返回一个uid+token
+               登录成功后后端会返回一个uid+token:
+               { "username":"","password":""} //这里参数名称默认就是这个，由HttpSecurity配置时指定的formLogin()预定义。
     2. 登录-3：后续通信前端需要在header里面增加uid: ${uid};
               且请求体必须包含签名_signature，签名规则：MD5(请求体json串按key重排序后+登录时返回的token)
 

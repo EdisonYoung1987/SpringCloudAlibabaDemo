@@ -3,6 +3,7 @@ package com.edison.springCloudAlibabaDemo.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.edison.springCloudAlibabaDemo.constant.ResponseConstant;
+import com.edison.springCloudAlibabaDemo.dto.UserLoginDto;
 import com.edison.springCloudAlibabaDemo.entity.AuthToken;
 import com.edison.springCloudAlibabaDemo.feignClient.GitAuthFeignClient;
 import com.edison.springCloudAlibabaDemo.feignClient.GitUserFeignClient;
@@ -40,6 +41,16 @@ public class LoginController {
 
     @Autowired
     SeqnoGenerator seqnoGenerator;//流水号生成器
+
+    @PostMapping("/login")
+    public ResponseData loging(@RequestBody UserLoginDto userLoginDto){
+        log.info("开始验证,username={},password={}",userLoginDto.getUsername(),userLoginDto.getPassword());
+        //TODO 使用私钥解密密码
+
+        //请求/auth/oauth/token获取token TODO
+
+        return ResponseData.success(null);
+    }
 
     /**使用git第三方登录*/
     @GetMapping("/loginThirdGit")

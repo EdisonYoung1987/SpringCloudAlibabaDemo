@@ -26,15 +26,24 @@ public class FilterUtil {
         return uid;
     }
 
-    /**检查请求路径是否为文件操作*/
-    public static boolean isFileOperation(ServerHttpRequest request){
+    /**检查请求路径是否需要验签等操作：验签需要缓存请求体*/
+    public static boolean needCheckSinature(ServerHttpRequest request){
         String path=request.getPath().toString();
-        if(path.startsWith("/user/file")){
-            return true;
-        }else{
+        if(path.startsWith("/user/file")||path.startsWith("/auth/login")){//登录和文件上传等操作都不需要
             return false;
+        }else{
+            return true;
         }
+    }
 
+    /**检查请求是否必须需要先登录*/
+    public static boolean needLogin(ServerHttpRequest request){
+        String path=request.getPath().toString();
+        if(path.startsWith("/auth/login")){//登录操作
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public static Mono<Void> errorResponse(ServerHttpResponse response, ResponseData data){

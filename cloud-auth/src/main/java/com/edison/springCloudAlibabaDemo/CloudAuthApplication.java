@@ -14,8 +14,8 @@ public class CloudAuthApplication {
         ConfigurableApplicationContext context=SpringApplication.run(CloudAuthApplication.class, args);
         log.info("-------------授权认证服务已启动-------------");
         String[] beans=context.getBeanDefinitionNames();
-        for(String bean:beans){
+     /*   for(String bean:beans){
             System.out.println(bean);
-        }
+        }*/
     }
 }

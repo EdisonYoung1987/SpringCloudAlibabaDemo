@@ -35,7 +35,7 @@ public class ReadRequestBodyFilter implements GlobalFilter, Ordered {
         log.info(exchange.getRequest().getHeaders().toString());
         String uid= FilterUtil.getUidFromHeader(exchange.getRequest().getHeaders());
         if(!StringUtil.isNullOrEmpty(uid)){//已登录 需要验签等操作，故缓存请求体
-            if(FilterUtil.isFileOperation(exchange.getRequest())){//文件操作直接返回
+            if(!FilterUtil.needCheckSinature(exchange.getRequest())){//登录和文件操作等不需要缓存请求体
                 return chain.filter(exchange); //不做任何处理
             }
             ServerRequest serverRequest = ServerRequest.create(exchange, HandlerStrategies.withDefaults().messageReaders());
