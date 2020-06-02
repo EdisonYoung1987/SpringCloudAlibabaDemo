@@ -1,20 +1,21 @@
 package com.edison.springCloudAlibabaDemo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+
 
 @RestController    //@RestContller返回json格式不能用于页面提取数据，如果需要返回数据给页面则使用@Controller注释
 @RequestMapping("/hello")
 @Slf4j
 public class HelloController {
+    /**这个没有权限验证*/
     @PostMapping("/sayhello" )
     public ResponseData hello(HttpServletRequest request, @RequestBody String body){
 

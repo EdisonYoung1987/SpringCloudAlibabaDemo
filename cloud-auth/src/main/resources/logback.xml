@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
   <contextName>CLOUD_AUTH</contextName>
-  <property name="LOG_HOME" value="${SPRINGBOOTDEMO_HOME}/log" />
+  <property name="LOG_HOME" value="${SPRINGBOOTDEMO_HOME}/log/cloud-auth" />
   <property name="MAX_DAY" value="7" />
   <property name="MAX_FILE_SIZE" value="20MB" />
   <property name="PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}][%level][%class:%line]%n%msg%n%n"/>
@@ -89,6 +89,22 @@
   </appender>
   <logger name="druid.sql" level="ERROR" additivity="false">
     <appender-ref ref="FILE-DB" />
+  </logger>
+  <!-- add for DB end -->
+  <!-- add for OAUTH2 begin 没生效-->
+  <appender name="FILE-OAUTH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/auth.log</file>
+    <encoder>
+      <pattern>${PATTERN}</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/hislog/auth.log.%d{yyyy-MM-dd}</fileNamePattern>
+      <maxHistory>${MAX_DAY}</maxHistory>
+    </rollingPolicy>
+  </appender>
+  <logger name="org.springframework.security.oauth2"  level="DEBUG" additivity="false">
+    <appender-ref ref="FILE-OAUTH" />
+    <appender-ref ref="CONSOLE" />
   </logger>
   <!-- add for DB end -->
 

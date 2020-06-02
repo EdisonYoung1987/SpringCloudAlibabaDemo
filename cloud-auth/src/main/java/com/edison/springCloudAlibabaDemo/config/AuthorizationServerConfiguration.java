@@ -25,7 +25,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients.inMemory().withClient("client_1")
 //                .resourceIds(DEMO_RESOURCE_ID)
                 .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password")
-                .authorizedGrantTypes("client_credentials", "refresh_token")
+//                .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("select")
                 .authorities("client")
                 .secret("123456")
