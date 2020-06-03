@@ -37,8 +37,12 @@ content-Type: application/json;charset=UTF-8
 }
 > {% client.global.set("authorization", "bearer "+ response.body.data.access_token); %}
 
-###第三方登录GIThub-获取授权码后
-GET http://localhost:9001/auth/login/loginThirdGit?code=015dd1b86e913be4ee24
+###使用github第三方登录-获取授权码
+##ie执行后实际上就会直接调用/auth/login/loginThirdGit?code=26080016452d3567bed9
+https://github.com/login/oauth/authorize?client_id=76010f96ba5380e16c13&redirect_uri=http://localhost:9001/auth/login/loginThirdGit
+
+###使用github第三方登录-获取token
+GET http://localhost:9001/auth/login/loginThirdGit?code=26080016452d3567bed9
 content-Type: application/json;charset=UTF-8
 
 ###

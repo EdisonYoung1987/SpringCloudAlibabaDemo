@@ -37,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {//对认证管理器进行配置。
         auth
             .inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("edison").password(new BCryptPasswordEncoder().encode("123456")).roles("USER");
+                .withUser("edison").password(new BCryptPasswordEncoder().encode("123456")).roles("USER")
+        ;
+
     }
 }
