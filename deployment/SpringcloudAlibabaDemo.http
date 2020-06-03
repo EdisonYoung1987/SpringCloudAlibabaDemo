@@ -16,16 +16,17 @@ uid: 15123926942
 }
 
 ###这个需要再auth验权
-POST 127.0.0.1:9001/user/user/getUserInfo
+GET 127.0.0.1:9001/user/user/getUserInfo
 content-Type: application/json;charset=UTF-8
 uid: 15123926942
+Authorization: {{authorization}}
 
 {
 "_ts":"123971293712",
 "_signature": "_ts123971293712111"
 }
 
-###登录
+###登录5dceff8e-6c27-4e16-9b41-c5fc23a32674
 POST 127.0.0.1:9001/auth/login/login
 content-Type: application/json;charset=UTF-8
 
@@ -34,10 +35,29 @@ content-Type: application/json;charset=UTF-8
 "password": "admin",
 "_ts":"123971293712"
 }
+> {% client.global.set("authorization", "bearer "+ response.body.data.access_token); %}
 
-###第三方登录
+###第三方登录GIThub-获取授权码后
 GET http://localhost:9001/auth/login/loginThirdGit?code=015dd1b86e913be4ee24
 content-Type: application/json;charset=UTF-8
 
+###
+#第三方通过授权码模式登录我方系统 需要使用ie浏览器---还没成功
+localhost:9001/auth/oauth/authorize?client_id=client1&redirect_uri=localhost:9001/user/hello/sayhello&response_type=code&scope=select
+curl -X POST --user client1:123456 http://10.150.62.116:9001/auth/oauth/authorize -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -d "response_type=code&scope=select"
+
+
+###密码模式
+#这种方式不行：
+#POST http://10.150.62.116:9001/auth/oauth/token?grant_type=password&username=edison&password=123456&client_id=client_2&scope=select
+#这种可行
+curl -X POST --user client2:123456 http://10.150.62.116:9001/auth/oauth/token -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -d "grant_type=password&username=edison&password=123456&scope=select"
+
+#返回
+{"access_token":"1ff6d8f9-dd57-4753-9226-dc880023196b",
+"token_type":"bearer",
+"refresh_token":"e84b9402-b340-473e-a01e-7f268a902972",
+"expires_in":43199,
+"scope":"select"}
 
 ###

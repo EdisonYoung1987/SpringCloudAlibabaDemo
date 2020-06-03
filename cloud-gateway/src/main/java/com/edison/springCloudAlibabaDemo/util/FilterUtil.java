@@ -1,6 +1,5 @@
 package com.edison.springCloudAlibabaDemo.util;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -8,13 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class FilterUtil {
     public static String getUidFromHeader(HttpHeaders headers){
@@ -29,7 +25,7 @@ public class FilterUtil {
     /**检查请求路径是否需要验签等操作：验签需要缓存请求体*/
     public static boolean needCheckSinature(ServerHttpRequest request){
         String path=request.getPath().toString();
-        if(path.startsWith("/user/file")||path.startsWith("/auth/login")){//登录和文件上传等操作都不需要
+        if(path.startsWith("/user/file")||!needLogin(request)){//登录和文件上传等操作都不需要
             return false;
         }else{
             return true;
@@ -39,7 +35,7 @@ public class FilterUtil {
     /**检查请求是否必须需要先登录*/
     public static boolean needLogin(ServerHttpRequest request){
         String path=request.getPath().toString();
-        if(path.startsWith("/auth/login")){//登录操作
+        if(path.startsWith("/auth/login")||path.startsWith("/auth/oauth/authorize")||path.startsWith("/auth/oauth/token")){//登录操作
             return false;
         }else{
             return true;

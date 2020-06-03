@@ -1,22 +1,25 @@
 package com.edison.springCloudAlibabaDemo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.edison.springCloudAlibabaDemo.constant.ResponseConstant;
 import com.edison.springCloudAlibabaDemo.dto.UserLoginDto;
-import com.edison.springCloudAlibabaDemo.entity.AuthToken;
 import com.edison.springCloudAlibabaDemo.feignClient.GitAuthFeignClient;
 import com.edison.springCloudAlibabaDemo.feignClient.GitUserFeignClient;
+import com.edison.springCloudAlibabaDemo.feignClient.TokenFeignClient;
 import com.edison.springCloudAlibabaDemo.response.ResponseData;
-import com.edison.springCloudAlibabaDemo.response.RspException;
 import com.edison.springCloudAlibabaDemo.util.SeqnoGenerator;
+import feign.Contract;
+import feign.Feign;
+import feign.auth.BasicAuthRequestInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +42,11 @@ public class LoginController {
     @Autowired
     GitUserFeignClient gitUserFeignClient;
 
+    private TokenFeignClient tokenFeignClient;
+
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
+
     @Autowired
     SeqnoGenerator seqnoGenerator;//流水号生成器
 
@@ -47,9 +55,31 @@ public class LoginController {
         log.info("开始验证,username={},password={}",userLoginDto.getUsername(),userLoginDto.getPassword());
         //TODO 使用私钥解密密码
 
-        //请求/auth/oauth/token获取token TODO
+        //请求自己的认证服务器获取token
+        // 从nacos中获取认证服务的一个实例地址
+        ServiceInstance serviceInstance = loadBalancerClient.choose("cloud-auth");//认证服务器的应用名称
+        // 此地址就是http:// ip:port
+        URI uri = serviceInstance.getUri();
+        System.out.println(uri);
 
-        return ResponseData.success(null);
+        //因为这个涉及到Basic认证，所以就没有使用
+        tokenFeignClient=Feign.builder()
+//                .client(client).encoder(encoder).decoder(decoder)
+                .contract(new Contract.Default())
+                .requestInterceptor(new BasicAuthRequestInterceptor("client2","123456"))
+                .target(TokenFeignClient.class,uri.toString());
+        String res=tokenFeignClient.getToken("password","edison","123456");
+        try{
+            JSONObject jsonObject=JSONObject.parseObject(res);
+            String access_token=jsonObject.getString("access_token");
+            if(!StringUtils.isEmpty(access_token)){
+                return ResponseData.success(jsonObject);
+            }else{
+                return ResponseData.error(ResponseConstant.SYSTEM_ERR_CODE);
+            }
+        }catch (Exception e){
+            return ResponseData.error(e);
+        }
     }
 
     /**使用git第三方登录*/

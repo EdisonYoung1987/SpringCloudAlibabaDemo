@@ -1,15 +1,14 @@
 package com.edison.springCloudAlibabaDemo.feignClient;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import feign.Param;
+import feign.RequestLine;
 
-/**请求本地/auth/oauth/token获取令牌*/
-@FeignClient(name="cloud-auth")
+/**使用用户名+密码+client_id+client_secret请求本地/auth/oauth/token获取令牌*/
+//@FeignClient(name="cloud-auth")
 public interface TokenFeignClient {
-    @GetMapping("/auth/oauth/token")
-    public String getGitUserInfo(@RequestParam("grant_type") String grant_type,
-                                 @RequestParam("username") String username,
-                                 @RequestParam("password") String password,
-                                 @RequestParam("client_id") String client_id);
+//    @GetMapping(value = "/auth/oauth/token",consumes = "application/x-www-form-urlencoded")
+    @RequestLine("POST /auth/oauth/token?grant_type={grant_type}&username={username}&password={password}")
+    public String getToken(@Param("grant_type") String grant_type,
+                           @Param("username") String username,
+                           @Param("password") String password);
 }

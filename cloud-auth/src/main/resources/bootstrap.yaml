@@ -7,6 +7,10 @@ server:
   servlet:
     context-path: /auth
 spring:
+#  security:  #这个是测试用的模拟用户的名称和密码
+#    user:
+#      name: edison
+#      password: $2a$10$7Nt9AlSU7RUUbFB5mZTq5.aihjlNWgUKHjYdroYSp49omVjguqS.C
   application:
     name: cloud-auth
   profiles:
