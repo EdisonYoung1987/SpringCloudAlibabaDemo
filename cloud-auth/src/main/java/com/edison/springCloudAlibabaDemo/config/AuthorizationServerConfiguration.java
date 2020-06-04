@@ -27,13 +27,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 //                .resourceIds(DEMO_RESOURCE_ID)
                 .authorizedGrantTypes("authorization_code",  "refresh_token") //client1只能使用授权码模式-第三方应用使用
 //                .authorizedGrantTypes("client_credentials", "refresh_token")
-                .scopes("select")
+//                .scopes("select")
 //                .authorities("client")
+                .redirectUris("http://localhost:9001/user/callback")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
+                .accessTokenValiditySeconds(3*24*3600)
                 .and().withClient("client2")
 //                .resourceIds(DEMO_RESOURCE_ID)
                 .authorizedGrantTypes("client_credentials","password", "refresh_token")//client2只能使用密码模式-内部使用
-                .scopes("select")
+//                .scopes("select")
+                .accessTokenValiditySeconds(7*24*3600)
 //                .authorities("client")
                 .secret(new BCryptPasswordEncoder().encode("123456")) //密码模式不需要client_secret
         ;

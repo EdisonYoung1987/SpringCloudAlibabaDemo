@@ -35,7 +35,7 @@ public class FilterUtil {
     /**检查请求是否必须需要先登录*/
     public static boolean needLogin(ServerHttpRequest request){
         String path=request.getPath().toString();
-        if(path.startsWith("/auth/login")||path.startsWith("/auth/oauth/authorize")||path.startsWith("/auth/oauth/token")){//登录操作
+        if(path.startsWith("/auth/login")||path.startsWith("/auth/oauth")){//登录操作
             return false;
         }else{
             return true;

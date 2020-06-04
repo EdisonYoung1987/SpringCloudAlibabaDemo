@@ -19,6 +19,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +52,13 @@ public class LoginController {
     SeqnoGenerator seqnoGenerator;//流水号生成器
 
     @PostMapping("/login")
-    public ResponseData loging(@RequestBody UserLoginDto userLoginDto){
+    public ResponseData loging(HttpServletRequest request, @RequestBody UserLoginDto userLoginDto){
+      /*  Enumeration<String> keys= request.getHeaderNames();
+        while(keys.hasMoreElements()){
+            String key=keys.nextElement();
+            log.info("{}: {}",key,request.getHeaders(key));
+        }
+        log.info("uri={}",request.getPath());*/
         log.info("开始验证,username={},password={}",userLoginDto.getUsername(),userLoginDto.getPassword());
         //TODO 使用私钥解密密码
 
@@ -68,7 +75,7 @@ public class LoginController {
                 .contract(new Contract.Default())
                 .requestInterceptor(new BasicAuthRequestInterceptor("client2","123456"))
                 .target(TokenFeignClient.class,uri.toString());
-        String res=tokenFeignClient.getToken("password","edison","123456");
+        String res=tokenFeignClient.getToken("password",userLoginDto.getUsername(),userLoginDto.getPassword());
         try{
             JSONObject jsonObject=JSONObject.parseObject(res);
             String access_token=jsonObject.getString("access_token");

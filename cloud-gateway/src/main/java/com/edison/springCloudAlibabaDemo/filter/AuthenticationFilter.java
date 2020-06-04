@@ -65,7 +65,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             //验签:_signature
             if(!checkSinature(jsonObject,uid)){//验签失败
                 log.error("验签失败");
-                return FilterUtil.errorResponse(exchange.getResponse(),ResponseData.error(ResponseConstant.LOGIN_NO_LOGIN));//重新登录
+                return FilterUtil.errorResponse(exchange.getResponse(),ResponseData.error(ResponseConstant.REQUEST_BAD_REQUEST));
             }
 
             //TODO 检查是否重复请求：_signature+uid 在redis

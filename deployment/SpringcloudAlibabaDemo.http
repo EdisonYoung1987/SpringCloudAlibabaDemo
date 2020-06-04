@@ -39,22 +39,24 @@ content-Type: application/json;charset=UTF-8
 
 ###使用github第三方登录-获取授权码
 ##ie执行后实际上就会直接调用/auth/login/loginThirdGit?code=26080016452d3567bed9
-https://github.com/login/oauth/authorize?client_id=76010f96ba5380e16c13&redirect_uri=http://localhost:9001/auth/login/loginThirdGit
+https://github.com/login/oauth/authorize?client_id=76010f96ba5380e16c13&redirect_uri=http://localhost:9001/user/hello/sayhello
 
 ###使用github第三方登录-获取token
 GET http://localhost:9001/auth/login/loginThirdGit?code=26080016452d3567bed9
 content-Type: application/json;charset=UTF-8
 
 ###
-#第三方通过授权码模式登录我方系统 需要使用ie浏览器---还没成功
-localhost:9001/auth/oauth/authorize?client_id=client1&redirect_uri=localhost:9001/user/hello/sayhello&response_type=code&scope=select
-curl -X POST --user client1:123456 http://10.150.62.116:9001/auth/oauth/authorize -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -d "response_type=code&scope=select"
+#第三方通过授权码模式登录我方系统
+#1.获取授权码：需要使用ie浏览器--暂时跳过网关可以实现跳转
+http://localhost:9002/auth/oauth/authorize?client_id=client1&redirect_uri=http://localhost:9001/user/callback&response_type=code&scope=select
 
+#2.获取access_token：scope，redirect_uri等信息都要带上
+curl -X POST --user client1:123456 http://10.150.62.249:9001/auth/oauth/token -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -d "grant_type=authorization_code&code=JevVoH&scope=select&redirect_uri=http://localhost:9001/user/callback"
 
-###密码模式
-#这种方式不行：
+###密码模式获取我方系统access_token
+#这种方式不行：因为开启了basi认证
 #POST http://10.150.62.116:9001/auth/oauth/token?grant_type=password&username=edison&password=123456&client_id=client_2&scope=select
-#这种可行
+#这种可行:
 curl -X POST --user client2:123456 http://10.150.62.116:9001/auth/oauth/token -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -d "grant_type=password&username=edison&password=123456&scope=select"
 
 #返回

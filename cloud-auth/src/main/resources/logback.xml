@@ -102,7 +102,7 @@
       <maxHistory>${MAX_DAY}</maxHistory>
     </rollingPolicy>
   </appender>
-  <logger name="org.springframework.security.oauth2"  level="DEBUG" additivity="false">
+  <logger name="org.springframework.security"  level="DEBUG" additivity="false">
     <appender-ref ref="FILE-OAUTH" />
     <appender-ref ref="CONSOLE" />
   </logger>

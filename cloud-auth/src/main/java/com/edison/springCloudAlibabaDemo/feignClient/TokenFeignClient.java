@@ -7,7 +7,7 @@ import feign.RequestLine;
 //@FeignClient(name="cloud-auth")
 public interface TokenFeignClient {
 //    @GetMapping(value = "/auth/oauth/token",consumes = "application/x-www-form-urlencoded")
-    @RequestLine("POST /auth/oauth/token?grant_type={grant_type}&username={username}&password={password}")
+    @RequestLine("POST /auth/oauth/token?grant_type={grant_type}&username={username}&password={password}&scope=select")
     public String getToken(@Param("grant_type") String grant_type,
                            @Param("username") String username,
                            @Param("password") String password);
