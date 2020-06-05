@@ -79,7 +79,29 @@ public class LoginController {
         try{
             JSONObject jsonObject=JSONObject.parseObject(res);
             String access_token=jsonObject.getString("access_token");
-            if(!StringUtils.isEmpty(access_token)){
+            if(!StringUtils.isEmpty(access_token)){//登录成功
+
+               /* 这个是为了实现authorize获取授权码时login后回跳的逻辑，但是失败了。。。。
+               //查看是否需要跳转/auth/oauth/authorize在登录成功后需要会跳
+                HttpSession session=request.getSession(false);
+                if(session!=null){
+                    try {
+                        Object object=session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                        if(object!=null){
+                            DefaultSavedRequest defaultSavedRequest=(DefaultSavedRequest)object;
+                            log.info("需要跳转原界面");
+                            log.info("defaultSavedRequest={}-{}-{}",defaultSavedRequest.getPathInfo(),defaultSavedRequest.getRequestURL(),defaultSavedRequest.getQueryString());
+                            log.info(defaultSavedRequest.toString());//HttpSessionRequestCache.SAVED_REQUEST))
+
+                            response.sendRedirect(defaultSavedRequest.getRequestURL()+"?"+defaultSavedRequest.getQueryString());//设置会跳 301?
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    log.info("session is null");
+                }*/
                 return ResponseData.success(jsonObject);
             }else{
                 return ResponseData.error(ResponseConstant.SYSTEM_ERR_CODE);
