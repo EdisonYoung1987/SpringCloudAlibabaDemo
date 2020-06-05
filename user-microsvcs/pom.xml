@@ -21,6 +21,11 @@
             <artifactId>cloud-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--rpc 的dubbo-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-dubbo</artifactId>
+        </dependency>
         <!-- nacos注册发现中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -34,6 +39,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
         </dependency>
     </dependencies>
 </project>

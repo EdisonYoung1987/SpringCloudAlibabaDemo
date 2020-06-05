@@ -12,3 +12,17 @@ spring:
     port: 6379
     timeout: 30s
 #    password:
+  #数据库相关
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud_auth?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.cj.jdbc.Driver
+  #连接池 需要配置pom.xml
+    type: com.alibaba.druid.pool.DruidDataSource
+  #配置druid相关参数
+  #初始化连接数、最小、最大
+    druid:
+      initial-size: 5
+      min-idle: 5
+      maxActive: 30
