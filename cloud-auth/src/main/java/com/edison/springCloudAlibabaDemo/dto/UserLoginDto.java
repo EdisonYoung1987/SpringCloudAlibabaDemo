@@ -16,5 +16,5 @@ import java.io.Serializable;
 public class UserLoginDto implements Serializable {
     private String username;
     private String password;
-    private String grant_type;//用户类型
+//    private String grant_type;//用户类型
 }

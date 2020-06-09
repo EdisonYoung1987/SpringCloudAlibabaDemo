@@ -2,7 +2,7 @@ package com.edison.springCloudAlibabaDemo.service;
 
 
 import com.edison.springCloudAlibabaDemo.dto.UserLoginDto;
-import com.edison.springCloudAlibabaDemo.entity.AuthToken;
+import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,7 +17,7 @@ public interface AuthService {
      * @param userLongDto
      * @return
      */
-    public AuthToken login(UserLoginDto userLongDto);
+    public ResponseData doLogin(UserLoginDto userLongDto);
 
 
 }

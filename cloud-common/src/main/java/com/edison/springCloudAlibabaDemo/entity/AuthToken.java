@@ -8,6 +8,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class AuthToken {
+    public String uid;//用户id
     public String access_token;//访问token就是短令牌，用户身份令牌
     public String refresh_token;//刷新token
     public long expires_in; //过期时间

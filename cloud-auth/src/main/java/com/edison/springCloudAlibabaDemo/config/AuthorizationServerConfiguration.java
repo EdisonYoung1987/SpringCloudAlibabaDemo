@@ -2,6 +2,7 @@ package com.edison.springCloudAlibabaDemo.config;
 
 import com.edison.springCloudAlibabaDemo.service.impl.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,12 +53,19 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients.jdbc(dataSource);
     }
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .tokenStore(new RedisTokenStore(redisConnectionFactory)) //认证服务器和资源服务器都配置redis保存token，这样资源服务器直接查redis即可验证是否有效
                 .authenticationManager(authenticationManager)//WebSecurityConfig提供的
-                .userDetailsService(myUserDetailsService);//重写用户获取服务
+                .userDetailsService(myUserDetailsService)//重写用户获取服务
+        ;
+
     }
 
     @Override

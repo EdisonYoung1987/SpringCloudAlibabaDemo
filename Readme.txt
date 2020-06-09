@@ -1,7 +1,7 @@
 cloud-gateway:
     网关系统，采用的spring cloud gateway，主要是路由、过滤功能
     服务注册和发现中心使用的是nacos
-    rpc采用dubbo
+    rpc采用dubbo，其注册和发现中心还是nacos
     http请求客户端：feign
     服务降级和熔断采用sentinel
     链路追踪：skywalking

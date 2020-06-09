@@ -1,9 +1,13 @@
 ################
 ##配置都在nacos上
 ################
-git:
-  client_id: 76010f96ba5380e16c13
-  client_secret: b1d17709b531d64646d7cb0d08e6a2755db2d909
+secure:
+  git:
+    client_id: 76010f96ba5380e16c13
+    client_secret: b1d17709b531d64646d7cb0d08e6a2755db2d909
+  myself:
+    client_id: client2
+    client_secret: 123456
 #redis相关
 spring:
   redis:
@@ -26,3 +30,12 @@ spring:
       initial-size: 5
       min-idle: 5
       maxActive: 30
+#dubbo相关-消费者
+# Dubbo 配置项，对应 DubboConfigurationProperties 类
+dubbo:
+  # Dubbo 服务注册中心配置，对应 RegistryConfig 类
+  registry:
+    address: spring-cloud://127.0.0.1:8848 # 指定 Dubbo 服务注册中心的地址
+  # Spring Cloud Alibaba Dubbo 专属配置项，对应 DubboCloudProperties 类
+  cloud:
+    subscribed-services: user-microsvcs # 设置订阅的应用列表，用','分割，默认为 * 订阅所有应用。不推荐使用*，会占用更多内存和cpu

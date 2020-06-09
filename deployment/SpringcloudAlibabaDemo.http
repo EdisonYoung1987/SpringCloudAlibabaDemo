@@ -31,8 +31,8 @@ POST 127.0.0.1:9001/auth/login/login
 content-Type: application/json;charset=UTF-8
 
 {
-"username":"admin",
-"password": "admin",
+"username":"edison",
+"password": "123456",
 "_ts":"123971293712"
 }
 > {% client.global.set("authorization", "bearer "+ response.body.data.access_token); %}
