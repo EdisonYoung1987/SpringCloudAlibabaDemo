@@ -8,7 +8,7 @@ import com.edison.springCloudAlibabaDemo.response.ResponseData;
 import com.edison.springCloudAlibabaDemo.util.FilterUtil;
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -20,7 +20,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -28,7 +30,7 @@ import java.util.function.Consumer;
 @Slf4j
 @Component
 public class AuthenticationFilter implements GlobalFilter, Ordered {
-    @Autowired
+    @Resource(name="customRedisTemplate")//自定义的执行lua脚本才不会报错
     RedisTemplate redisTemplate;
 
     //不存在则设置
@@ -54,23 +56,28 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         if(StringUtil.isNullOrEmpty(uid) && FilterUtil.needLogin(request)){//必须登录
             return  FilterUtil.errorResponse(exchange.getResponse(), ResponseData.error(ResponseConstant.LOGIN_NO_LOGIN));
         }
-
         log.info("uid={}",uid);
 
+        //here 说明要么是请求不需要登录的接口-uid=null，要么是已经登录的情况-uid!=null
         try {//进行验签等操作
             //因为登陆后的后续请求通信不含token，所以为了权限问题，需要根据uid取出token并加到请求头中
-            Object authObject=redisTemplate.opsForValue().get(SystemConstant.TOKEN_KEY+uid);
-            if(authObject==null){//已过期或者该uid无效
-                log.error("该uid不正确或已失效{}",uid);
-                return FilterUtil.errorResponse(exchange.getResponse(),ResponseData.error(ResponseConstant.LOGIN_NO_LOGIN));
+            String access_token=null ;
+            if(!StringUtils.isEmpty(uid)) {//已经登录的需要用uid获取token重置header
+                Object authObject = redisTemplate.opsForValue().get(SystemConstant.TOKEN_KEY + uid);
+                if (authObject == null) {//已过期或者该uid无效
+                    log.error("该uid不正确或已失效{}", uid);
+                    return FilterUtil.errorResponse(exchange.getResponse(), ResponseData.error(ResponseConstant.LOGIN_NO_LOGIN));
+                }
+                String token = ((JSONObject) authObject).getString("access_token");
+                access_token=token;
+                headers.set("Authorization", "bearer " + access_token);
+                Consumer<HttpHeaders> httpHeaders = httpHeader -> {
+                    httpHeader.set("Authorization", "bearer " + token);
+                };
+                request = request.mutate().headers(httpHeaders).build();
+                exchange = exchange.mutate().request(request).build();
+
             }
-            String access_token=((JSONObject)authObject).getString("access_token");
-            headers.set("Authorization","bearer "+access_token);
-            Consumer<HttpHeaders> httpHeaders = httpHeader -> {
-                httpHeader.set("Authorization", "bearer "+access_token);
-            };
-            request= request.mutate().headers(httpHeaders).build();
-            exchange=exchange.mutate().request(request).build();
 
             //检查是否需要验签
             boolean needCheckSinature=FilterUtil.needCheckSinature(request);
@@ -101,12 +108,12 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             //检查是否重复请求：uid+_signature 在redis
             String sinature=jsonObject.getString("_signature");
             String key=uid+":"+sinature;
-           /* Object ret=redisTemplate.execute(releaseScript, Collections.singletonList(key),1,150);
+            Object ret=redisTemplate.execute(releaseScript, Collections.singletonList(key),1,150);
             if(ret!=null && (Long)ret==1){
                 log.error("重复的请求");
                 return FilterUtil.errorResponse(exchange.getResponse(),ResponseData.error(ResponseConstant.REQUEST_DUPLICATED));
 
-            }TODO 这里在报错，后面有空再看*/
+            }
         } catch (Exception e) {
             log.error("验权异常:",e);
             return FilterUtil.errorResponse(exchange.getResponse(),ResponseData.error(e));
@@ -135,6 +142,9 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         //TODO 使用MD5编码
         String checkSinature=strOrdered+access_token;
+
+        //还原signature到jsonobject
+        jsonObject.put("_signature",sinature);
 
         return checkSinature.equals(sinature);
     }

@@ -11,8 +11,8 @@ content-Type: application/json;charset=UTF-8
 uid: 100086
 
 {
-  "_ts":"123971293712",
-  "_signature": "_ts123971293712111"
+  "_ts":"1239712937112",
+  "_signature": "_ts1239712937112111"
 }
 
 ###这个需要再auth验权
@@ -22,8 +22,8 @@ uid: 100086
 #Authorization: {{authorization}} #Spring cloud gateway会根据uid自动添加授权token信息
 
 {
-"_ts":"123971293712",
-"_signature": "_ts123971293712111"
+"_ts":"12397129371111112",
+"_signature": "_ts12397129371111112111"
 }
 
 ###登录5dceff8e-6c27-4e16-9b41-c5fc23a32674

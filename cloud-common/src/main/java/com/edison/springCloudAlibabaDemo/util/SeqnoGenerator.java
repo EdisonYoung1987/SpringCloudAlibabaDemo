@@ -2,7 +2,6 @@ package com.edison.springCloudAlibabaDemo.util;
 
 import com.edison.springCloudAlibabaDemo.constant.SystemConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ public class SeqnoGenerator {
     private long currNum=0L;
     private long currMaxNum=0L;
 
-    @Autowired
+    @Resource(name="customRedisTemplate")//自定义的执行才不会报错
     RedisTemplate redisTemplate;
 
     /**生成一个全局的id，用于跟踪*/

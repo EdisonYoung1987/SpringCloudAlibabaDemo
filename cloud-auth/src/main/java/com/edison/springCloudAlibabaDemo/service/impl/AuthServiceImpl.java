@@ -21,6 +21,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private LoadBalancerClient loadBalancerClient;
     @Reference(check = false)//spring启动时不检查远程应用是否启动
     UserService userService;
-    @Autowired
+    @Resource(name="customRedisTemplate")
     RedisTemplate redisTemplate;
 
     @Override
