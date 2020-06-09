@@ -31,3 +31,7 @@ cloud-gateway:
     后端提供用户补充用户信息的接口，以及绑定第三方账号的接口
 
 RSA工具“https://blog.csdn.net/weixin_42231507/article/details/80898890
+
+下一步待完成： 20200609
+    1. 整合sentinel
+    2. 整合skywalking
