@@ -8,7 +8,7 @@
 ####这个实际上并没有真正再auth验权
 POST 127.0.0.1:9001/user/hello/sayhello
 content-Type: application/json;charset=UTF-8
-uid: 15123926942
+uid: 100086
 
 {
   "_ts":"123971293712",
@@ -18,8 +18,8 @@ uid: 15123926942
 ###这个需要再auth验权
 GET 127.0.0.1:9001/user/user/getUserInfo
 content-Type: application/json;charset=UTF-8
-uid: 15123926942
-Authorization: {{authorization}}
+uid: 100086
+#Authorization: {{authorization}} #Spring cloud gateway会根据uid自动添加授权token信息
 
 {
 "_ts":"123971293712",
