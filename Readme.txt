@@ -3,8 +3,8 @@ cloud-gateway:
     服务注册和发现中心使用的是nacos
     rpc采用dubbo，其注册和发现中心还是nacos
     http请求客户端：feign
-    服务降级和熔断采用sentinel
-    链路追踪：skywalking
+    服务降级和熔断采用sentinel<未完成>
+    链路追踪：skywalking<未完成>
     负载均衡：除了dubbo自带的，还可以使用Ribbon
 
 前后端交互说明：
