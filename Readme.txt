@@ -33,5 +33,7 @@ cloud-gateway:
 RSA工具“https://blog.csdn.net/weixin_42231507/article/details/80898890
 
 下一步待完成： 20200609
+    0. 完善用户表+用户详情表+第三方关联登陆表
     1. 整合sentinel
     2. 整合skywalking
+
