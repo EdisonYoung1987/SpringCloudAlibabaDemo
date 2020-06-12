@@ -1,4 +1,4 @@
-cloud-gateway:
+整体说明:
     网关系统，采用的spring cloud gateway，主要是路由、过滤功能
     服务注册和发现中心使用的是nacos
     rpc采用dubbo，其注册和发现中心还是nacos
