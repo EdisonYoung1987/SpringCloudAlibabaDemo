@@ -1,9 +1,6 @@
 import com.edison.springCloudAlibabaDemo.elasticsearch.RestClientApp;
 import com.edison.springCloudAlibabaDemo.elasticsearch.entity.UserInfo;
-import com.edison.springCloudAlibabaDemo.elasticsearch.service.SearchBoolService;
-import com.edison.springCloudAlibabaDemo.elasticsearch.service.SearchMatchService;
-import com.edison.springCloudAlibabaDemo.elasticsearch.service.SearchRangeService;
-import com.edison.springCloudAlibabaDemo.elasticsearch.service.SearchTermService;
+import com.edison.springCloudAlibabaDemo.elasticsearch.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
@@ -29,6 +26,8 @@ public class SearchTest {
     SearchRangeService searchRangeService;
     @Autowired
     SearchBoolService searchBoolService;
+    @Autowired
+    SearchAggrMetricService searchAggrMetricService;
 
     @Test
     public void testTermQuery(){
@@ -85,5 +84,12 @@ public class SearchTest {
     @Test//多条件联合查询
     public void testBoolQuery(){
         searchBoolService.boolQuery();
+    }
+
+    @Test//聚合查询
+    public void testAggsQuery(){
+        searchAggrMetricService.aggregationStats();
+        log.info("--------------------------------");
+        searchAggrMetricService.aggregationPercentiles();
     }
 }
