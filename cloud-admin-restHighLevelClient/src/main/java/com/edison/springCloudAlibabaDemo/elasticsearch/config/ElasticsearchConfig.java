@@ -27,9 +27,9 @@ public class ElasticsearchConfig {
 
         // 异步连接延时配置
         builder.setRequestConfigCallback(requestConfigBuilder -> {
-            requestConfigBuilder.setConnectTimeout(5000);
-            requestConfigBuilder.setSocketTimeout(5000);
-            requestConfigBuilder.setConnectionRequestTimeout(5000);
+            requestConfigBuilder.setConnectTimeout(30000);
+            requestConfigBuilder.setSocketTimeout(31000);
+            requestConfigBuilder.setConnectionRequestTimeout(32000);
             return requestConfigBuilder;
         });;
         // 异步连接数配置
@@ -42,4 +42,5 @@ public class ElasticsearchConfig {
         RestHighLevelClient client = new RestHighLevelClient(builder);
         return client;
     }
+
 }
