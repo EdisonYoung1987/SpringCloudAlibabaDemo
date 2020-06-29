@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 
-/**聚合查找*/
+/**Metric 聚合分析*/
 @Slf4j
 @Service
 public class SearchAggrMetricService {

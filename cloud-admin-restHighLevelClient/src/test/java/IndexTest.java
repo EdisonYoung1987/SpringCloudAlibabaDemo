@@ -37,7 +37,7 @@ public class IndexTest {
     @Test
     public void indexTest() {
         try {
-            String indexName = "mydlq-user";
+            String indexName = "mydlq-user2";
             boolean exists = indexService.exists(indexName);
             if (exists) {
                 log.info("该索引{}已存在,进行删除操作", indexName);
@@ -94,7 +94,7 @@ public class IndexTest {
                     .build();
 
             //创建索引
-            boolean isCreated = indexService.createIndex("mydlq-user", settings, xContentBuilder);
+            boolean isCreated = indexService.createIndex(indexName, settings, xContentBuilder);
 
             log.info("是否创建成功：" + isCreated);
         }catch (Exception e){

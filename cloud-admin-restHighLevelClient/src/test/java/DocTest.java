@@ -21,12 +21,12 @@ public class DocTest {
 
     @Test
     public void docTest() {
-        String indexName = "mydlq-user";
+        String indexName = "mydlq-user2";
         String docId=null;
         for(int i=0;i<1000;i++) {
             // 创建员工信息
             UserInfo userInfo = new UserInfo();
-            userInfo.setName("张三");
+            userInfo.setName("张三"+i);
             int age=i%100+1;
             userInfo.setAge(age);
             userInfo.setSalary(100.00f+i);
@@ -34,7 +34,7 @@ public class DocTest {
             userInfo.setRemark("来自北京市的张先生"+i);
             userInfo.setCreateTime(new Date());
             userInfo.setBirthDate(LocalDate.now().minusYears(age).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            docId=docService.addDocument(userInfo,indexName);
+            docId=docService.addDocument(userInfo,indexName,null);
 
             if(docId==null){
                 log.error("创建对象失败");
@@ -56,13 +56,13 @@ public class DocTest {
         log.info(userInfo.toString());
 
         // 设置员工更新信息
-        userInfo = new UserInfo();
-        userInfo.setSalary(200.00f);
-        userInfo.setAddress("北京市海淀区");
-        docService.updateDocument(userInfo,indexName,docId);
-
-        log.info("经过更新后...");
-        userInfo=docService.getDocument(indexName,docId,UserInfo.class);
-        log.info(userInfo.toString());
+//        userInfo = new UserInfo();
+//        userInfo.setSalary(200.00f);
+//        userInfo.setAddress("北京市海淀区");
+//        docService.updateDocument(userInfo,indexName,docId);
+//
+//        log.info("经过更新后...");
+//        userInfo=docService.getDocument(indexName,docId,UserInfo.class);
+//        log.info(userInfo.toString());
     }
 }

@@ -15,6 +15,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -32,11 +33,15 @@ public class DocService {
     /**
      * 增加文档信息
      */
-    public  String addDocument(Object object,String indexName) {
+    public  String addDocument(Object object,String indexName,String docId) {
         try {
             // 创建索引请求对象
-            IndexRequest indexRequest = new IndexRequest(indexName,DEFAULT_DOCTYPE);
-
+            IndexRequest indexRequest;
+            if(StringUtils.isEmpty(docId)){
+                indexRequest = new IndexRequest(indexName,DEFAULT_DOCTYPE); //此时id自动生成=UUIDs.base64UUID()
+            }else {
+                indexRequest= new IndexRequest(indexName,DEFAULT_DOCTYPE,docId); //这个指定插入的doc的id
+            }
             // 将对象转换为 byte 数组
             byte[] json = JSON.toJSONBytes(object);
             // 设置文档内容
