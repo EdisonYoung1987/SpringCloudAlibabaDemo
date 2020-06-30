@@ -2,10 +2,12 @@ package com.edison.springCloudAlibabaDemo.util;
 
 import com.edison.springCloudAlibabaDemo.constant.SystemConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +20,7 @@ public class SeqnoGenerator {
     private long currNum=0L;
     private long currMaxNum=0L;
 
-    @Resource(name="customRedisTemplate")//自定义的执行才不会报错
+    @Autowired
     RedisTemplate redisTemplate;
 
     /**生成一个全局的id，用于跟踪*/
@@ -40,13 +42,13 @@ public class SeqnoGenerator {
             currNum++;//从1开始
         }
         return SystemConstant.SYSTEM_SIGN+
-                DateUtil.getFormatDateString(new Date(),"yyMMddHHmm")+
+                DateUtil.getFormatDateString(LocalDateTime.now(),"yyMMddHHmm")+
                 String.format("%010d",currNum);
     }
 
     /**获取当天流水偏移量*/
     private long getCurrStepFromRedis(){
-        String key="EdisonSeq:"+DateUtil.getFormatDateString(new Date(),"yyyyMMdd");
+        String key="EdisonSeq:"+DateUtil.getFormatDateString(LocalDateTime.now(),"yyyyMMdd");
         long currentStep=redisTemplate.opsForValue().increment(key,SEQ_STEP);
         if(currentStep==SEQ_STEP){//说明是当天第一个获取流水
             log.info("当天第一个获取流水");
