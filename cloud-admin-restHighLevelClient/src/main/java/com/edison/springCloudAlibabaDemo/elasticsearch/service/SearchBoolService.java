@@ -31,7 +31,7 @@ public class SearchBoolService {
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             // 构建查询条件
             //地址必须满足这三个区且计算分值，不能包含名字为李四,且birthDate的年份在1990-1995之间，不计算分值。
-            //should是可有可无的条件，一般有了must或者filter就不用
+            //should是可有可无的条件，一般有了must或者filter就不用,filter和must的区别在于filter不计算分值，所以较must快。
             boolQueryBuilder.must(QueryBuilders.termsQuery("address.keyword", "北京市海淀区", "北京市大兴区", "北京市房山区"))
                     .should(QueryBuilders.termQuery("name.keyword","张三"))
                     .mustNot(QueryBuilders.termQuery("name.keyword","李四"))

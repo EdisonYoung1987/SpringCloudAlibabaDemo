@@ -2,6 +2,8 @@ package com.edison.springCloudAlibabaDemo.elasticsearch.service;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -12,13 +14,18 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**文档的增删改查*/
 @Slf4j
@@ -33,7 +40,7 @@ public class DocService {
     /**
      * 增加文档信息
      */
-    public  String addDocument(Object object,String indexName,String docId) {
+    public <T>  String addDocument(T object,String indexName,String docId) {
         try {
             // 创建索引请求对象
             IndexRequest indexRequest;
@@ -62,6 +69,55 @@ public class DocService {
         }
     }
 
+    /**批量插入*/
+    public <T> void addDocumentsBatch(String indexName, List<T> data) throws  IOException{
+        BulkRequest bulkRequest = new BulkRequest();
+        for(T obj:data){
+            IndexRequest indexRequest = new IndexRequest(indexName, DEFAULT_DOCTYPE);
+            indexRequest.source(JSON.toJSONString(obj).getBytes("UTF-8"), XContentType.JSON);
+            bulkRequest.add(indexRequest);
+        };
+        //5-15M大小即可
+        BulkResponse bulkResponse= restHighLevelClient.bulk(bulkRequest,RequestOptions.DEFAULT);
+        log.info("bulk status="+bulkResponse.status().getStatus());
+        System.out.println(bulkResponse);
+        System.out.println(bulkResponse.status());
+    }
+
+    public void delDocumentsBatchByIds(String indexName,List<String> ids) throws Exception{
+        BulkRequest bulkRequest = new BulkRequest();
+        for(String id:ids){
+            DeleteRequest deleteRequest=new DeleteRequest(indexName, DEFAULT_DOCTYPE,id);
+            bulkRequest.add(deleteRequest);
+        }
+        BulkResponse bulkResponse= restHighLevelClient.bulk(bulkRequest,RequestOptions.DEFAULT);
+        log.info("bulk status="+bulkResponse.getItems());
+    }
+
+    public long delDocumentsBatchByQuery(String indexName, QueryBuilder queryBuilder) throws Exception{
+        DeleteByQueryRequest deleteByQueryRequest=new DeleteByQueryRequest(indexName);
+        // 更新时版本冲突
+        deleteByQueryRequest.setConflicts("proceed");
+
+        // 设置查询条件
+        deleteByQueryRequest.setQuery(queryBuilder);
+        // 批次大小
+        deleteByQueryRequest.setBatchSize(1000);
+        // 并行
+        deleteByQueryRequest.setSlices(2);
+        // 使用滚动参数来控制“搜索上下文”存活的时间
+        deleteByQueryRequest.setScroll(TimeValue.timeValueMinutes(10));
+        // 超时
+        deleteByQueryRequest.setTimeout(TimeValue.timeValueMinutes(2));
+        // 刷新索引
+        deleteByQueryRequest.setRefresh(true);
+
+        BulkByScrollResponse bulkByScrollResponse=restHighLevelClient.deleteByQuery(deleteByQueryRequest,RequestOptions.DEFAULT);
+        System.out.println(bulkByScrollResponse.getTotal());
+        System.out.println(bulkByScrollResponse.getDeleted());
+        return bulkByScrollResponse.getDeleted();
+    }
+
     /**
      * 获取文档信息
      */
@@ -87,7 +143,7 @@ public class DocService {
     /**
      * 更新文档信息
      */
-    public void updateDocument(Object object,String indeName,String docId) {
+    public <T> void updateDocument(T object,String indeName,String docId) {
         try {
             // 创建索引请求对象
             UpdateRequest updateRequest = new UpdateRequest(indeName, DEFAULT_DOCTYPE, docId);

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edison.springCloudAlibabaDemo.elasticsearch.mapper.Student202009Mapper">
+  <resultMap id="BaseResultMap" type="com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009">
+    <id column="sid" jdbcType="VARCHAR" property="sid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="homeaddr" jdbcType="VARCHAR" property="homeaddr" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="birthDate" jdbcType="VARCHAR" property="birthdate" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="height" jdbcType="REAL" property="height" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sid, name, homeaddr, age, birthDate, createTime, phone, remark, sex, height
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from student_202009
+    where sid = #{sid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from student_202009
+    where sid = #{sid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009">
+    insert into student_202009 (sid, name, homeaddr, 
+      age, birthDate, createTime, 
+      phone, remark, sex, 
+      height)
+    values (#{sid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{homeaddr,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{birthdate,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{phone,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{height,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009">
+    insert into student_202009
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        sid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="homeaddr != null">
+        homeaddr,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="birthdate != null">
+        birthDate,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="homeaddr != null">
+        #{homeaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthdate != null">
+        #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009">
+    update student_202009
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="homeaddr != null">
+        homeaddr = #{homeaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthdate != null">
+        birthDate = #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=REAL},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009">
+    update student_202009
+    set name = #{name,jdbcType=VARCHAR},
+      homeaddr = #{homeaddr,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      birthDate = #{birthdate,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      phone = #{phone,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      height = #{height,jdbcType=REAL}
+    where sid = #{sid,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertBatch">
+    INSERT INTO student_202009
+    (sid,name,homeaddr,age,birthdate,createtime,phone,remark,sex,height)
+    VALUES
+    <foreach collection ="list" item="stu" separator =",">
+      (#{stu.sid}, #{stu.name}, #{stu.homeaddr}, #{stu.age}, #{stu.birthdate}, #{stu.createtime}, #{stu.phone}, #{stu.remark}, #{stu.sex},#{stu.height})
+    </foreach >
+  </insert>
+
+</mapper>
