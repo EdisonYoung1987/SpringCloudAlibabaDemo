@@ -1,0 +1,72 @@
+{
+    "settings":{
+      "number_of_shards":1,
+      "number_of_replicas":0,
+      "analysis": {
+	"analyzer": {
+		"ik": {
+			"tokenizer": "ik_max_word"
+		 }
+	}
+      }
+    },
+    "mappings": {
+      "_doc": {
+        "dynamic": "false",
+        "properties": {
+	  "sid": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "homeaddr": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "age": {
+            "type": "integer"
+          },
+          "birthDate": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "createTime": {
+            "type": "date"
+          },
+          "phone": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "remark": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+	  "sex": {
+             "type": "keyword"
+          },
+          "height": {
+            "type": "float"
+          }
+        }
+      }
+    }
+  }
+

@@ -1,0 +1,26 @@
+{
+  "_source": [
+    "age",
+    "birthdate",
+    "createtime",
+    "height",
+    "homeaddr",
+    "name",
+    "phone",
+    "remark",
+    "sex",
+    "sid"
+  ],
+  "query": {
+    "match_all": {}
+  },
+  "from": 0,
+  "size": 10,
+  "sort": [
+    {
+      "sid": {
+        "order": "asc"
+      }
+    }
+  ]
+}
