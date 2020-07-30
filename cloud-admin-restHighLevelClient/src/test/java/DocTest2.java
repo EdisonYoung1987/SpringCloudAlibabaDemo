@@ -48,14 +48,17 @@ public class DocTest2 {
     SqlSessionFactory sqlSessionFactory;
 
     private static Random RANDOM=new Random(System.currentTimeMillis());
+    private static final int TOTAL=1000;//要插入的总的文档数量
+    private static final int BATCH_SIZE=3000;//每个批次数量
+    private static final String INDEX_NAME = "logs-000001";
+
 
     @Test
     /**批量插入es和数据库，根据_id列表批量删除，根据查询条件批量删除测试*/
     public void docTest_addbatch() {
         RandomPersonInfoUtil randomPersonInfoUtil=new RandomPersonInfoUtil();
-        AtomicLong atomicInteger=new AtomicLong(1L);
+        AtomicLong atomicInteger=new AtomicLong(100001L);
         //往es的student_202009和mysql同时写入数据
-        String indexName = "student_202009";
         String docId=null;
         List<Student202009> list=new ArrayList<>(1500);
         int batch=1;
@@ -63,7 +66,7 @@ public class DocTest2 {
 //        SqlSession sqlsession=sqlSessionFactory.openSession(ExecutorType.BATCH,false);
 //        Student202009Mapper student202009Mapper1=sqlsession.getMapper(Student202009Mapper.class);
 
-        for(int i=0;i<100000;i++) {
+        for(int i=0;i<TOTAL;i++) {
             // 创建学生信息
             Student202009 stu=new Student202009();
             int age=getRandomAge();
@@ -83,21 +86,21 @@ public class DocTest2 {
             list.add(stu);
 
 
-            if(list.size()==1500||i==99999){
+            if(list.size()==BATCH_SIZE||i==TOTAL-1){
                 try {
                     long start=System.currentTimeMillis();
                     //5-15M大小即可 所以1500这个数据还可以往大了调整
-                    docService.addDocumentsBatch(indexName, list);
+                    docService.addDocumentsBatch(INDEX_NAME, list);
                     long end=System.currentTimeMillis();
                     log.info("插入es第{}个批次1500条，耗时{}秒",batch,(end-start)/1000);
                     start=System.currentTimeMillis();
                     //mysql默认接受sql的大小是1048576(1M) 所以1500条是没问题的
                     //insert into xxx values (...)(...)，这是标准的mysql导入导出写法，这是最快的。
                     // 数据量较大的情况下，ExecutorType.BATCH 比上种用法慢上100倍不止。
-                    student202009Mapper.insertBatch(list); //foreach方式竟然比BATCH还要快得多  只需3秒。。
+//                    student202009Mapper.insertBatch(list); //foreach方式竟然比BATCH还要快得多  只需3秒。。
 //                    sqlsession.commit();
                     end=System.currentTimeMillis();
-                    log.info("插入数据库第{}个批次1500条，耗时{}秒",batch,(end-start)/1000);
+                    log.info("插入数据库第{}个批次{}条，耗时{}秒",batch,BATCH_SIZE,(end-start)/1000);
                     batch++;
                 } catch (Exception e) {
                     e.printStackTrace();
