@@ -156,7 +156,7 @@ public class DocTest2 {
 
     public String getRandomSex(){
         String[] sexes={"男","女"};
-        return sexes[RANDOM.nextInt(1)];
+        return sexes[RANDOM.nextInt(2)];
     }
 
 
