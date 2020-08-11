@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**实体类*/
-public class Student202009 implements Serializable {
+public class Student202109 implements Serializable {
     private String sid;
 
     private String name;
@@ -13,9 +13,9 @@ public class Student202009 implements Serializable {
 
     private Integer age;
 
-    private Date birthdate;
+    private Date birthDate;
 
-    private Date createtime;
+    private Date createTime;
 
     private String phone;
 
@@ -59,20 +59,20 @@ public class Student202009 implements Serializable {
         this.age = age;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getPhone() {
@@ -107,24 +107,5 @@ public class Student202009 implements Serializable {
         this.height = height;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", sid=").append(sid);
-        sb.append(", name=").append(name);
-        sb.append(", homeaddr=").append(homeaddr);
-        sb.append(", age=").append(age);
-        sb.append(", birthdate=").append(birthdate);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", phone=").append(phone);
-        sb.append(", remark=").append(remark);
-        sb.append(", sex=").append(sex);
-        sb.append(", height=").append(height);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
+
 }

@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="homeaddr" jdbcType="VARCHAR" property="homeaddr" />
     <result column="age" jdbcType="INTEGER" property="age" />
-    <result column="birthDate" jdbcType="VARCHAR" property="birthdate" />
+    <result column="birthDate" jdbcType="TIMESTAMP" property="birthdate" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -32,7 +32,7 @@
       phone, remark, sex, 
       height)
     values (#{sid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{homeaddr,jdbcType=VARCHAR}, 
-      #{age,jdbcType=INTEGER}, #{birthdate,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{age,jdbcType=INTEGER}, #{birthdate,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}, 
       #{phone,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
       #{height,jdbcType=REAL})
   </insert>
@@ -84,7 +84,7 @@
         #{age,jdbcType=INTEGER},
       </if>
       <if test="birthdate != null">
-        #{birthdate,jdbcType=VARCHAR},
+        #{birthdate,jdbcType=TIMESTAMP},
       </if>
       <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
@@ -116,7 +116,7 @@
         age = #{age,jdbcType=INTEGER},
       </if>
       <if test="birthdate != null">
-        birthDate = #{birthdate,jdbcType=VARCHAR},
+        birthDate = #{birthdate,jdbcType=TIMESTAMP},
       </if>
       <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
@@ -141,7 +141,7 @@
     set name = #{name,jdbcType=VARCHAR},
       homeaddr = #{homeaddr,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
-      birthDate = #{birthdate,jdbcType=VARCHAR},
+      birthDate = #{birthdate,jdbcType=TIMESTAMP},
       createTime = #{createtime,jdbcType=TIMESTAMP},
       phone = #{phone,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
@@ -157,5 +157,4 @@
       (#{stu.sid}, #{stu.name}, #{stu.homeaddr}, #{stu.age}, #{stu.birthdate}, #{stu.createtime}, #{stu.phone}, #{stu.remark}, #{stu.sex},#{stu.height})
     </foreach >
   </insert>
-
 </mapper>

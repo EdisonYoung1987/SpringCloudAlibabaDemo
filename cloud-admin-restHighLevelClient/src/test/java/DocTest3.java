@@ -1,6 +1,5 @@
 import com.edison.springCloudAlibabaDemo.elasticsearch.RestClientApp;
-import com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202009;
-import com.edison.springCloudAlibabaDemo.elasticsearch.mapper.Student202009Mapper;
+import com.edison.springCloudAlibabaDemo.elasticsearch.entity.Student202109;
 import com.edison.springCloudAlibabaDemo.elasticsearch.service.DocService;
 import com.edison.springCloudAlibabaDemo.elasticsearch.utils.NameUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,34 +24,17 @@ import java.util.concurrent.atomic.AtomicLong;
 @RunWith(SpringRunner.class)
 @Slf4j
 /**批量插入和批量删除和根据查询结果批量删除*/
-public class DocTest2 {
+public class DocTest3 {
     @Autowired
     DocService docService;
-    @Autowired
-    Student202009Mapper student202009Mapper;
-    /**
-     *  如果不是springboot自动配置的话，需要进行如下加载，才能获取 sqlSessionFactory，可参考多数据源配置
-     *
-     * // 实例SessionFactory
-     *             sqlSessionFactoryBean = new SqlSessionFactoryBean();
-     *             // 配置数据源
-     *             sqlSessionFactoryBean.setDataSource(dataSource);
-     *
-     *             // 加载MyBatis配置文件
-     *             PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-     *             // 能加载多个，所以可以配置通配符(如：classpath*:mapper/**\/*.xml)
-            *sqlSessionFactoryBean.setMapperLocations(resourcePatternResolver.getResources(mapperLocations));
-     *             // 配置mybatis的config文件(我目前用不上)
-             *             // sqlSessionFactoryBean.setConfigLocation("mybatis-config.xml");
-     *             sqlSessionFactoryBean.getObject();
-            */
+
     @Autowired
     SqlSessionFactory sqlSessionFactory;
 
     private static Random RANDOM=new Random(System.currentTimeMillis());
-    private static final int TOTAL=100000;//要插入的总的文档数量
+    private static final int TOTAL=20;//要插入的总的文档数量
     private static final int BATCH_SIZE=3000;//每个批次数量
-    private static final String INDEX_NAME = "student_202009";
+    private static final String INDEX_NAME = "student_202109";
 
 
     @Test
@@ -62,7 +44,7 @@ public class DocTest2 {
         AtomicLong atomicInteger=new AtomicLong(100001L);
         //往es的student_202009和mysql同时写入数据
         String docId=null;
-        List<Student202009> list=new ArrayList<>(1500);
+        List<Student202109> list=new ArrayList<>(1500);
         int batch=1;
 
 //        SqlSession sqlsession=sqlSessionFactory.openSession(ExecutorType.BATCH,false);
@@ -70,11 +52,11 @@ public class DocTest2 {
 
         for(int i=0;i<TOTAL;i++) {
             // 创建学生信息
-            Student202009 stu=new Student202009();
+            Student202109 stu=new Student202109();
             int age=getRandomAge();
             stu.setAge(age);
-            stu.setBirthdate(Date.from(LocalDateTime.now().minusYears(age).minusMonths(RANDOM.nextInt(7)).minusDays(RANDOM.nextInt(5)).atZone(ZoneId.systemDefault()).toInstant()));
-            stu.setCreatetime(new Date());
+            stu.setBirthDate(Date.from(LocalDateTime.now().minusYears(age).minusMonths(RANDOM.nextInt(7)).minusDays(RANDOM.nextInt(5)).atZone(ZoneId.systemDefault()).toInstant()));
+            stu.setCreateTime(new Date());
             stu.setHeight((float)(1.40+RANDOM.nextInt(60)*0.01));
             stu.setHomeaddr(RandomPersonInfoUtil.getRandomLocation());
             stu.setSex(getRandomSex());
@@ -99,7 +81,7 @@ public class DocTest2 {
                     //mysql默认接受sql的大小是1048576(1M) 所以1500条是没问题的
                     //insert into xxx values (...)(...)，这是标准的mysql导入导出写法，这是最快的。
                     // 数据量较大的情况下，ExecutorType.BATCH 比上种用法慢上100倍不止。
-                    student202009Mapper.insertBatch(list); //foreach方式竟然比BATCH还要快得多  只需3秒。。
+//                    student202009Mapper.insertBatch(list); //foreach方式竟然比BATCH还要快得多  只需3秒。。
 //                    sqlsession.commit();
                     end=System.currentTimeMillis();
                     log.info("插入数据库第{}个批次{}条，耗时{}秒",batch,BATCH_SIZE,(end-start)/1000);
@@ -119,17 +101,19 @@ public class DocTest2 {
     /**根据id列表删除*/
     @Test
     public void docTest_delbatchByIds() throws Exception{
+        String indexName = "student_202009";
         List<String> ids=new ArrayList<>(8);
         ids.add("-4-Fk3MBwzZ693qXgf8j");
         ids.add("_I_sk3MBwzZ693qXmv8d");
-        docService.delDocumentsBatchByIds(INDEX_NAME,ids);
+        docService.delDocumentsBatchByIds(indexName,ids);
     }
 
     /**根据查询条件删除*/
     @Test
     public void docTest_delbatchByQuery() throws Exception{
+        String indexName = "student_202009";
         List<String> ids=new ArrayList<>(8);
-        docService.delDocumentsBatchByQuery(INDEX_NAME, QueryBuilders.matchAllQuery());
+        docService.delDocumentsBatchByQuery(indexName, QueryBuilders.matchAllQuery());
     }
 
 

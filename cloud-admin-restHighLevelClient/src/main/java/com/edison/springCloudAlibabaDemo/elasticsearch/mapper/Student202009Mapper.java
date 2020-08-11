@@ -15,11 +15,10 @@ public interface Student202009Mapper {
 
     int insertSelective(Student202009 record);
 
-    int insertBatch(List<Student202009> list);
-
     Student202009 selectByPrimaryKey(String sid);
 
     int updateByPrimaryKeySelective(Student202009 record);
 
     int updateByPrimaryKey(Student202009 record);
+    int insertBatch(List<Student202009> list);
 }
