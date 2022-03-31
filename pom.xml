@@ -26,7 +26,7 @@
 
     <properties>
         <!--springboot 、cloud 、cloud alibaba三者的版本依赖关系可以参考https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明-->
-        <springboot.version>2.2.4.RELEASE</springboot.version>
+        <springboot.version>2.5.12</springboot.version>
         <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
 <!--        <spring.cloud.version>Greenwich.RC2</spring.cloud.version>-->
         <spring.cloud.alibaba.version>2.2.0.RELEASE</spring.cloud.alibaba.version>
